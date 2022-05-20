@@ -1,4 +1,10 @@
 PKGS=(
+    xorg
+    xorg-server
+    xorg-apps
+    xorg-drivers
+    xorg-xkill
+    xorg-xinit
     bluedevil
     breeze
     breeze-gtk
