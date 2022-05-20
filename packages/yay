@@ -1,0 +1,17 @@
+PKGS=(
+    brave-bin
+    cava
+    freetube-bin
+    isoimagewriter
+    lbry-app-bin
+    ly-git
+    minecraft-launcher
+    openrgb-bin
+    pipes.sh
+    tty-clock-git
+    ulauncher
+    video-trimmer
+    webapp-manager
+    yay-bin
+    rar
+)

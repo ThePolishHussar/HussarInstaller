@@ -1,0 +1,9 @@
+systemctl enable ly.service
+systemctl enable NetworkManager.service
+systemctl enable bluetooth.service
+systemctl enable reflector.service
+systemctl enable avahi-daemon.service
+systemctl enable sshd.service
+systemctl enable cups.service
+systemctl enable dhcpd.service
+systemctl enable numlockon.service
