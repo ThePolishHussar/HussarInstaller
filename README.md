@@ -7,7 +7,7 @@ Simple install.conf file for system adaptation
 
 Dedicated /home/ partition
 
-~~homefolder copying supported (copy contents into /configs/home
+~~homefolder copying supported (copy contents into /configs/home~~
 
 # Planned Features:
 - Automated or guided config setup if prexisting install.conf not found (auto detect cpu gpu etc. ask user about prefrences regarding system configuration)
