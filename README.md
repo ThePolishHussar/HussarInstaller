@@ -16,3 +16,5 @@ homefolder copying supported (copy contents into /configs/home
 
 # Known Bugs:
 aur packages fail to install, including ly, the display manager. You will boot into a tty.
+no display server
+configs fail to copy
