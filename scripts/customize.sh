@@ -5,4 +5,12 @@ source $HOME/HussarInstaller/install.conf
 
 cp -r configs/home/.  /mnt/home/$username/
 
+#pull HussarLibrary
+mkdir /mnt/home/$username/Scripts
+git clone https://github.com/ThePolishHussar/HussarLibrary/ $username/Scripts
+
+#pull Derek Taylor's (aka DistroTube) wallpaper collection
+mkdir -p /mnt/home/$username/Pictures/wallpapers
+git clone https://gitlab.com/dwt1/wallpapers.git /mnt/home/$username/Pictures/wallpapers
+
 #make and copy kde rice here
