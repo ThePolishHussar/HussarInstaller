@@ -1,24 +1,29 @@
 PKGS=(
+    #display server
+    
     xorg
     xorg-server
     xorg-apps
     xorg-drivers
     xorg-xkill
     xorg-xinit
-    bluedevil
-    breeze
-    breeze-gtk
-    drkonqi
-    kactivitymanagerd
-    kde-cli-tools
-    kde-gtk-config
-    kdecoration
-    kdeplasma-addons
-    kgamma5
-    khotkeys
-    kinfocenter
-    kmenuedit
-    kmix
+    
+    #kde applicatons
+    
+    bluedevil                   #bluetooth applet
+    breeze                      #default kde theme
+    breeze-gtk                  #gtk port for breeze
+    drkonqi                     
+    kactivitymanagerd           
+    kde-cli-tools               
+    kde-gtk-config              
+    kdecoration                 
+    kdeplasma-addons            
+    kgamma5                     
+    khotkeys                    
+    kinfocenter                 
+    kmenuedit                   
+    kmix                        #sound mixer
     kscreen
     kscreenlocker
     ksystemstats
@@ -27,67 +32,67 @@ PKGS=(
     kwin
     kwrited
     layer-shell-qt
-    libkscreen
-    libksysguard
-    milou
-    plasma-browser-integration
-    plasma-desktop
+    libkscreen                  
+    libksysguard                
+    milou                       
+    plasma-browser-integration  #integrate browser more properly with the kde desktop
+    plasma-desktop              #kde plasma de
     plasma-integration
     plasma-nm
     plasma-pa
     plasma-sdk
-    plasma-systemmonitor
+    plasma-systemmonitor        #gui system monitor for kde
     plasma-thunderbolt
     plasma-workspace
     polkit-kde-agent
-    powerdevil
+    powerdevil                  #power management applet
     systemsettings
     xdg-desktop-portal-kde
-    ark
-    dolphin
-    dolphin-plugins
-    filelight
-    gwenview
-    kalarm
-    kalendar
-    kate
-    kamoso
-    kcalc
-    kcolorchooser
-    kdenlive
-    ktorrent
-    kwave
-    okular
-    partionmanager
-    print-manager
-    skanpage
-    spectacle
-    ktouch
-    android-tools
-    audacious
-    bleachbit
-    bluez
-    bluez-utils
-    cmatrix
-    element-desktop
-    flatpak
-    gimp
-    git
-    imagegick
-    inkscape
-    keepassxc
-    kitty
-    libreoffice-fresh
-    neofetch
-    nmon
-    notepadqq
-    onionshare
-    pinta
-    steam
-    sudo
-    syncthing
-    tor
-    vim
-    zip
-    unzip
+    ark                         #archiving tools
+    dolphin                     #gui file manager
+    dolphin-plugins             #plugin support for dolphin
+    filelight                   #tool to visualize storage usage 
+    gwenview                    #image viewer
+    kate                        #powerful text editor for kde
+    kamoso                      #camera
+    kcalc                       #calculator
+    kcolorchooser               #choose colors on the screen
+    kdenlive                    #video editor
+    ktorrent                    #kde bittorrent client
+    kwave                       #sound editor
+    okular                      #kde document viewer
+    partionmanager              #gui kde partion manager
+    print-manager               #print manager for kde
+    skanpage                    #document scanner
+    spectacle                   #screenshot tool
+    
+    #apps
+    
+    ktouch                      #Learn typing
+    android-tools               #Android tools
+    audacious                   #Simple audio player
+    bleachbit                   #System Cleaner
+    bluez                       #Bluetooth 
+    bluez-utils                 #Bluetooth
+    cmatrix                     #little terminal animation
+    element-desktop             #matrix client
+    flatpak                     #flatpak support
+    gimp                        #image manipulation program
+    git                         #tool for git repose
+    imagegick                   #dependencie for using images in neofetch
+    inkscape                    #vector image manipulation
+    keepassxc                   #password manager
+    kitty                       #terminal emulator
+    libreoffice-fresh           #more up to date office suite
+    neofetch                    #fetch system info in terminal 
+    nmon                        #terminal resource monitor
+    notepadqq                   #powerful yet simple tekxt editor
+    onionshare                  #share files over tor
+    pinta                       #image maniulation program
+    steam                       #game launcher
+    syncthing                   #file syncing
+    tor                         #tor browser
+    vim                         #terminal text editoe
+    zip                         #zip files
+    unzip                       #unzip files
 )
