@@ -10,8 +10,9 @@ Dedicated /home/ partition
 homefolder copying supported (copy contents into /configs/home
 
 # Planned Features:
-- (in dev branch) Automated or guided config setup if prexisting install.conf not found (auto detect cpu gpu etc. ask user about prefrences regarding system configuration)
+- Automated or guided config setup if prexisting install.conf not found (auto detect cpu gpu etc. ask user about prefrences regarding system configuration)
 - Legacy BIOS support
+- SB, TPM & FDE support
 - more options
 
 # Known Bugs:
