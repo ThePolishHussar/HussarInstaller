@@ -173,6 +173,9 @@ module_config () {
  	for MOD in "${MODULES[@]}"; do
 	 	source ./modules/$MOD
 	 	scriptmod
+		scriptmod () {
+			echo
+		}
  	done
 }
 
