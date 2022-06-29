@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# https://github.com/ThePolishHussar/HussarInstaller/
+# Matrix - @thewingedhussar:matrix.org
+
+scriptmod () {    
+	PS3='Select OpenRGB package.'
+	select PKG in openrgb openrgb-bin openrgb-git; do break; done
+	[ -f ./modules/rgb.conf ] && rm ./modules/rgb.conf
+	echo "AURpackages=($PKG)" >> ./modules/rgb.conf
+}
+
+user () {
+	source ./modules/rgb.conf
+}
+
+postconfig () {
+	echo 'i2c-dev' > /etc/modules-load.d/i2c.conf
+	[ lscpu | grep AuthenticAMD ] && echo 'i2c-piix4' >> /etc/modules-load.d/ic2.conf
+	[ lscpu | grep GenuineIntel ] && echo 'i2c=i801' >> /etc/modules-load.d/ic2.conf
+}
+

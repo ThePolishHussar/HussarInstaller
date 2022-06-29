@@ -1,0 +1,131 @@
+#!/bin/bash
+
+# https://github.com/ThePolishHussar/HussarInstaller/
+# Matrix - @thewingedhussar:matrix.org
+
+scriptmod () { 
+
+	 #if [ -f ./modules/basic_programs.conf ]; then
+		 #cat ./modules/basic_programs.conf
+		 #while true; do
+			 #read -p "Use these settings? [Y/n] " yn
+			 #case $yn in
+				 #[Nn]* ) break;;
+				 #* ) exit;;
+			 #esac
+		 #done
+	 #fi	
+
+	PACKAGES=''
+	AUR_PACKAGES=''
+	TEMP_ARRAY=''
+
+	STANDARD=( kitty vim zip unzip keepassxc )
+	AUR_STANDARD=( rar yay )
+
+	MEDIA=( mpv)
+	AUR_MEDIA=( musikcube lbry-app freetube )
+
+	OFFICE=( libreoffice-fresh )
+
+	AUDIO_EDITING=( audacity )
+
+	WEB=( webapp-manager tor  qbittorrent onionshare )
+	AUR_WEB=( librewolf-bin brave-bin )
+
+	MESSAGING=( element-desktop )
+	
+	VIDEO_EDITING=()
+	
+	IMAGE_EDITING=( imagemagick gimp inkscape)
+	
+	GAMES=( steam wine lutris gnome-keyring )
+	AUR_GAMES=( minecraft_launcher )
+
+	CLI_STUFF=( neofetch imagemagick cmatrix )
+	AUR_CLI_STUFF=( cava ascii-rain pipes pipes.sh tty-clock )
+
+	CD_DVD=( ripper drmsupport )
+
+	PKG_GROUPS=( STANDARD MEDIA OFFICE AUDIO_EDITING WEB MESSAGING VIDEO_EDITING IMAGE_EDITING GAMES CLI_STUFF CD_DVD )
+	AUR_GROUPS=( AUR_STANDARD AUR_MEDIA AUR_WEB AUR_GAMES AUR_CLI_STUFF )
+
+	for GROUP in "${PKG_GROUPS[@]}"; do
+		read -p "Do you want to install $GROUP software? [Y/n] " YN
+		case $YN in 
+			[Nn]* ) break;;
+			* ) declare -n TEMP_ARRAY=$GROUP; PACKAGES=(${PACKAGES[@]} ${TEMP_ARRAY[@]});;
+		esac
+	done
+
+	for GROUP in "${AUR_GROUPS[@]}"; do
+		read -p "Do you want to install $GROUP software from the AUR? [Y/n] " YN
+		case $YN in 
+			[Nn]* ) break;;
+			* ) declare -n TEMP_ARRAY=$GROUP; AUR_PACKAGES=(${AUR_PACKAGES[@]} ${TEMP_ARRAY[@]});;
+		esac
+	done
+
+	read -p "Do you want to download Ventoy installation scripts to ~/Scripts? [Y/n] " YN
+ 	case $YN in 
+	 	Nn* ) VENTOY_INSTALL='false';;
+	 	* )  VENTOY_INSTALL='true';;
+	esac
+
+	read -p "Do you want to download Proton-GE for Steam? [Y/n] " YN
+ 	case $YN in 
+	 	Nn* ) PROTONGE_INSTALL='false';;
+	 	* )  PROTONGE_INSTALL='true';;
+	esac
+
+	echo 'PACKAGES=(' >> ./modules/basic_programs.conf
+	for PKG in ${PACKAGES[@]}; do
+		echo "${PKG}" >> ./modules/basic_programs.conf
+	done
+	echo ')' >> ./modules/basic_programs.conf
+
+	echo 'AUR_PACKAGES=(' >> ./modules/basic_programs.conf
+	for PKG in ${AUR_PACKAGES[@]}; do
+		echo "${PKG}" >> ./modules/basic_programs.conf
+	done
+	echo ')' >> ./modules/basic_programs.conf
+
+	echo "VENTOY_INSTALL=$VENTOY_INSTALL" >> ./modules/basic_programs.conf
+
+	echo "PROTONGE_INSTALL=$PROTONGE_INSTALL" >> ./modules/basic_programs.conf
+
+}
+
+user () {
+	source ./modules/basic_programs.conf
+
+	for PKG in ${PACKAGES}; do
+		sudo pacman -S --noconfirm --needed $PKG
+	done
+
+	for PKG in ${AUR_PACKAGES}; do
+		sudo pacman -S --noconfirm --needed $PKG
+	done
+
+	if [ "$VENTOY_INSTALL" == "true" ]; then
+	 	VENVER=($(curl -s https://github.com/ventoy/Ventoy | grep '>Ventoy' | grep 'release<' | sed 's/mr-2//'| tr -d [:alpha:]'[< = " -- / > : ;]'))
+	 	[ -d ~/Scripts] || mkdir ~/Scripts
+	 	cd ~/Scripts
+	 	wget "https://github.com/ventoy/Ventoy/releases/download/v${VENVER}/ventoy-${VENVER}-linux.tar.gz"
+	 	tar -xf "ventoy-${VENVER}-linux.tar.gz"
+		mv  "ventoy-${VENVER}-linux.tar.gz" Ventoy
+		echo '${VENVER}' > ./Ventoy/version_number
+	 	rm  "ventoy-${VENVER}-linux.tar.gz"	
+	fi
+
+	if [ "$PROTONGE_INSTALL" == "true" ]; then
+	 	declare -n GEVER=($(curl -s https://github.com/GloriousEggroll/proton-ge-custom | grep '>GE-Proton' | sed 's/mr-2//' | sed 's/-/ /g' | tr -d [:alpha:][:punct:] | sed -e 's/^[[:space:]]*//'))
+	 	mkdir ~/.steam/root/compatibilitytools.d
+	 	cd ~/.steam/root/compatibilitytools.d
+	 	wget "https://github.com/GloriousEggroll/proton-ge-custom/releases/download/GE-Proton${GEVER[0]}-${GEVER[1]}/GE-Proton${GEVER[0]}-${GEVER[1]}.tar.gz"
+	 	tar -xf "GE-Proton${GEVER[0]}-${GEVER[1]}.tar.gz"
+	 	rm "GE-Proton${GEVER[0]}-${GEVER[1]}.tar.gz"
+	fi
+
+}
+

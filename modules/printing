@@ -1,0 +1,43 @@
+#!/bin/bash
+
+# https://github.com/ThePolishHussar/HussarInstaller/
+# Matrix - @thewingedhussar:matrix.org
+
+scriptmod () {    
+	 #if [ -f ./modules/printing.conf ]; then
+		 #cat ./modules/printing.conf
+		 #while true; do
+			 #read -p "Use these settings? [Y/n] " yn
+			 #case $yn in
+				 #[Nn]* ) break;;
+				 #* ) exit;;
+			 #esac
+		 #done
+	 #fi	
+
+	select PRINTER_CONNECTION in 'USB' 'DNS-SD/mDNS' 'Samba' 'Parallel Port'; do break; done
+	echo "PRINTER_CONNECTION =$PRINTER_CONNECTION " >> ./modules/printing.conf
+	#echo "PRINTER_MODEL=$PRINER_MODEL" >> ./modules/printing.conf
+}
+
+
+baseconfig () {
+	usermod -a -G 'printing/cups config group' $USERNAME
+}
+
+user () {
+	packages=(
+		cups 
+		cups-pdf	
+
+		ppd pkgs
+	)
+	AURpackages=(
+
+	)
+}
+
+postconfig () {
+	sed 51c'Out /home/${USER}/Documents/cups-pdf.'
+	systemctl enable cups.service
+}

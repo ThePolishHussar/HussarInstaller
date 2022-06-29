@@ -1,0 +1,52 @@
+#!/bin/bash
+
+# https://github.com/ThePolishHussar/HussarInstaller/
+# Matrix - @thewingedhussar:matrix.org
+
+scriptmod () {
+
+	BTEXTRA=''
+
+	echo 'Default packages: bluex, bluez-utils'
+	read -p 'Install extra packages? [y/N] ' YN
+	case $YN in 
+	 	[Yy]* ) MANUAL="true";;
+		* ) MANUAL="false";;
+	esac
+
+	if [ "$MANUAL" == "true" ]; then
+
+		echo 'Enter packages. Type "done" when finished'
+		while true; do
+			read -p "Package name: " PKG
+			case $PKG in 
+				done) break;;
+				*) 	BTEXTRA=(
+						${BTEXTRA[@]}
+						"$PKG"	
+					)
+				;;
+			esac
+		done
+	fi
+	
+	[ -f ./modules/bluetooth.conf ] && rm ./modules/bluetooth.conf
+	echo 'BTEXTRA=(' >> ./modules/bluetooth.conf
+	for PKG in "${BTEXTRA[@]}"; do
+		echo $PKG >> ./modules/bluetooth.conf
+	done
+	echo ')' >> ./modules/bluetooth.conf
+}
+
+user () {
+	[ -f ./modules/bluetooth.conf ] && source ./modules/bluetooth.conf
+	packages=(
+		bluez
+		bluez-utils
+		"${BTEXTRA[@]}"
+	)
+}
+
+postconfig () {
+	systemctl enable bluetooth.service
+}

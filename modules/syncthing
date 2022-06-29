@@ -1,0 +1,37 @@
+#!/bin/bash
+
+# https://github.com/ThePolishHussar/HussarInstaller/
+# Matrix - @thewingedhussar:matrix.org
+
+scriptmod () {
+
+	while true; do
+		read -p 'Add Syncthing GUI .desktop entry? [Y/n] ' YN
+		case $YN in
+			[Nn]* )	GUI_ENTRY='false'; break;;
+			* )	GUI_ENTRY='true'; break;;
+		esac
+	done
+
+	echo "GUI_ENTRY=$GUI_ENTRY" > ./modules/syncthing.conf
+
+}
+
+
+user () {
+	source ./syncthing.conf
+	packages=(
+		syncthing
+	)
+
+}
+
+postconfig () {
+
+	source ./install.conf
+	systemctl.enable "syncthing@${USERNAME}.service"
+
+	source ./modules/syncthing.conf
+	[ "$GUI_ENTRY" == "true" ] && curl -s https://raw.githubusercontent.com/syncthing/syncthing/main/etc/linux-desktop/syncthing-ui.desktop > /usr/local/share/applications/
+
+}
