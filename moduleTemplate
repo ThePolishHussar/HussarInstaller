@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# Git Repo Link
+# contact details
+
+scriptmod () {
+	echo > ./modules/*modulename*.conf
+}
+
+
+baseconfig () {
+
+}
+
+packages=(
+
+)
+
+AURpackages=(
+
+)
+	
+user () {
+	
+}
+
+postconfig () {
+
+} 
