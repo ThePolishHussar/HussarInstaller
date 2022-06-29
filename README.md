@@ -1,7 +1,7 @@
 # HussarInstaller
 A highly customizable modular arch install script.
 
-This branch is not functional. Do not use for now. We are open to module subbmissions. [See details bellow.](#module-making-guidelines=)
+This branch is not functional. Do not use for now. We are open to module subbmissions. [See details bellow.](#module-making-guidelines)
 
 
 ## Usage
