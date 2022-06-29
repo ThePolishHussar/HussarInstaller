@@ -45,10 +45,28 @@ scriptmod () {
 	CLI_STUFF=( neofetch imagemagick cmatrix )
 	AUR_CLI_STUFF=( cava ascii-rain pipes pipes.sh tty-clock )
 
-	CD_DVD=( ripper drmsupport )
+	#CD_DVD=( ripper drmsupport )
 
-	PKG_GROUPS=( STANDARD MEDIA OFFICE AUDIO_EDITING WEB MESSAGING VIDEO_EDITING IMAGE_EDITING GAMES CLI_STUFF CD_DVD )
-	AUR_GROUPS=( AUR_STANDARD AUR_MEDIA AUR_WEB AUR_GAMES AUR_CLI_STUFF )
+	PKG_GROUPS=( 
+		STANDARD
+		MEDIA
+		OFFICE
+		AUDIO_EDITING
+		WEB
+		MESSAGING
+		VIDEO_EDITING
+		IMAGE_EDITING
+		GAMES
+		CLI_STUFF
+		#CD_DVD
+	)
+	AUR_GROUPS=(
+		AUR_STANDARD
+		AUR_MEDIA
+		AUR_WEB
+		AUR_GAMES
+		AUR_CLI_STUFF
+	)
 
 	for GROUP in "${PKG_GROUPS[@]}"; do
 		read -p "Do you want to install $GROUP software? [Y/n] " YN
