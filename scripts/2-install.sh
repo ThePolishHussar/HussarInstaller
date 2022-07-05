@@ -18,6 +18,8 @@ lspci | grep VGA | grep -E "Intel" && GPU="xf86-video-intel mesa"
 lspci | grep VGA | grep -E "NVIDIA|GeForce" && GPU="nvidia nvidia-utils"
 lspci | grep VGA | grep -E "Radeon|AMD" && GPU="xf86-video-amdgpu mesa"
 
+[[ "$DISK" =~ 'nvme' ]] && pacman -S --noconfirm --needed util-linux
+
 pacstap -S --noconfirm --needed "$CPU" "$GPU"
 
 genfstab -U /mnt > /mnt/etc/fstab
