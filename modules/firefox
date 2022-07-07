@@ -1,0 +1,109 @@
+#!/bin/bash
+
+# https://github.com/ThePolishHussar/HussarInstaller/
+# Matrix - @thewingedhussar:matrix.org
+
+scriptmod () {
+
+	LINK=''
+	PS3='Selection > '
+
+	select FF_CONFIG in \
+		"ThePolishHussar's configs" \
+		"Arkenfox user.js" \
+		"Default" \
+		"Other - Provide js file" \
+		"Other - Provide tar file" \
+		"Other - Provide tared js file"
+	do break; done	
+
+
+	
+	if [ "$FF_CONFIG" == "Other - Provide js file" ] || [ "$FF_CONFIG" == "Other - Provide tar file" ] || [ "$FF_CONFIG" == "Other - Provide tared js file" ]; then
+
+		read -p "Enter link to a raw url to file: " LINK
+		LINK="https://$( echo $LINK | sed 's.https://..')"
+
+	elif [ "$FF_CONFIG" == "ThePolishHussar's configs" ]; then
+
+		LINK="https://github.com/ThePolishHussar/dotfiles/raw/main/firefox/profile.tar.gz"
+
+	elif [ "$FF_CONFIG" == "Arkenfox user.js"]; then
+
+		AFVER=$(curl -s https://github.com/arkenfox/user.js | grep 'arkenfox user.js v' | sed 's/mr-2//' | tr -d [:alpha:][:punct:][:space:])
+		LINK="https://github.com/arkenfox/user.js/archive/refs/tags/${AFVER}.0.tar.gz"
+
+	fi
+
+
+
+	if [ "$FF_CONFIG" == "ThePolishHussar's configs" ] || [ "$FF_CONFIG" == "Other - Provide tar file" ]; then
+
+		METHOD='tar'
+
+	elif [ "$FF_CONFIG" == "Other - Provide js file" ]; then
+
+		METHOD='js' 
+	
+	elif  [ "$FF_CONFIG" == "Arkenfox user.js" ] || [ "$FF_CONFIG" == "Other - Provide tared js file" ]; then
+
+		METHOD='tar-js'
+
+	elif [ "$FF_CONFIG" == "Default" ]; then
+
+		METHOD='none'
+
+	fi
+
+	{
+	echo "METHOD=$METHOD"  
+	[ "$METHOD" == "none" ] || echo "LINK=$LINK"
+	} > ./modules/firefox.conf
+
+}
+
+packages=(
+	firefox
+)
+
+user () {
+
+	source ./modules/firefox
+
+	firefox --headless & sleep 3 && killall firefox
+	PROFILE_DIR=$(cat ~/.mozilla/firefox/profiles.ini | grep 'Default=' | grep release | sed 's/Default=//')
+
+	if [ "$METHOD" == "js" ]; then
+
+		cd "~/.mozilla/firefox/$PROFILE_DIR"
+		rm prefs.js
+		curl -s "$LINK"
+	
+	elif [ "$METHOD" == "tar" ]; then
+
+		rm "~/.mozilla/firefox/$PROFILE_DIR/*"
+		cd "~/.mozilla/firefox/$PROFILE_DIR"
+		curl -s "$LINK"
+		FILE=$( echo $LINK | sed 's./. .g' | awk '{print $LAST}' ) 
+		tar -xf "$FILE"	
+		rm "$FILE"
+
+	elif [ "$METHOD" == "tar-js" ]; then
+		
+		rm -r "~/.mozilla/firefox/$PROFILE_DIR/prefs.js"
+		mkdir tempff 
+		cd tempff
+		curl -s "$LINK"
+		FILE=$( echo $LINK | sed 's./. .g' | awk '{print $LAST}' ) 
+		tar -xf "$FILE"
+		cp "*/user.js" "*/prefs.js" "user.js" "prefs.js" "~/.mozilla/firefox/$PROFILE_DIR/" 
+		cd ../
+		rm -r tempff
+
+	fi
+
+}
+
+finalmsg () {
+	echo 'Addons are highly recomended, especially for privacy. See uBlockOrgin at https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/'
+}

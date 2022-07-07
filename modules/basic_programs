@@ -16,9 +16,9 @@ scriptmod () {
 		 #done
 	 #fi	
 
-	PACKAGES=''
-	AUR_PACKAGES=''
-	TEMP_ARRAY=''
+	unset PACKAGES
+	unset AUR_PACKAGES
+	unset TEMP_ARRAY
 
 	STANDARD=( kitty vim zip unzip keepassxc )
 	AUR_STANDARD=( rar yay )
@@ -35,15 +35,16 @@ scriptmod () {
 
 	MESSAGING=( element-desktop )
 	
-	VIDEO_EDITING=()
+	VIDEO_EDITING=( kdenlive )
 	
 	IMAGE_EDITING=( imagemagick gimp inkscape)
 	
 	GAMES=( steam wine lutris gnome-keyring )
+	#gnome-keyring is for minecraft auto login
 	AUR_GAMES=( minecraft_launcher )
 
 	CLI_STUFF=( neofetch imagemagick cmatrix )
-	AUR_CLI_STUFF=( cava ascii-rain pipes pipes.sh tty-clock )
+	AUR_CLI_STUFF=( cava ascii-rain pipes.sh tty-clock )
 
 	#CD_DVD=( ripper drmsupport )
 

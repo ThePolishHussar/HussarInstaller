@@ -4,7 +4,9 @@
 # contact details
 
 scriptmod () {
-	echo > ./modules/*modulename*.conf
+	{
+	echo
+	} > ./modules/*modulename*.conf
 }
 
 
@@ -27,3 +29,7 @@ user () {
 postconfig () {
 
 } 
+
+finalmsg () {
+
+}

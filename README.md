@@ -77,7 +77,9 @@ I'm mainly looking for minmal DE package lists / modules, but improvements, sugg
 # contact details
 
 scriptmod () {
-	echo > ./modules/*modulename*.conf
+	{
+	echo
+	} > ./modules/*modulename*.conf
 }
 
 
@@ -100,6 +102,10 @@ user () {
 postconfig () {
 
 }
+
+finalmsg () {
+
+}
 ```
 
 #### Basic Rules / Behavior
@@ -109,6 +115,7 @@ postconfig () {
 - Packages listed in AURpackages are installed using yay during 4-user.sh
 - user function is executed at the end of 4-user.sh
 - postconfig function is executed at the end of 5-postconfig.sh
+- Output of finalmsg put into a text file in installed user's home folder
 - Additional arrays and functions should be referenced within the above listed ones
 - Avoid executing commands outside of functions whenever possible
 - Please reserve names that start with 'a' for modules that modify the script or other modules. This ensures they come first alphabetically, thus get executed first.

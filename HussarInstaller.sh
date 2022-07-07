@@ -4,25 +4,25 @@
 
 cmod a+rwx ./scripts/*
 
-./scripts/0-config.sh
+bash ./scripts/0-config.sh
 
 source ./install.conf
 
-./scripts/1-paritions.sh
+bash ./scripts/1-paritions.sh
 
-./scripts/2-install.sh
+bash ./scripts/2-install.sh
 
 cp -r ../HussarInstaller /mnt/root/HussarInstaller
 
-arch-chroot /mnt $HOME/HussarInstaller/scripts/3-baseconf.sh
+arch-chroot /mnt "bash mnt/root/HussarInstaller/scripts/3-baseconf.sh"
 
 sed -i 32c"%wheel ALL=(ALL:ALL) NOPASSWD: ALL" /mnt/etc/sudoers
-cp -r ../HussarInstaller /mnt/home/$USERNAME/HussarInstaller
-chmod a+rwx /mnt/home/$USERNAME/HussarInstaller/scripts/*
-chmod a+rwx /mnt/home/$USERNAME/HussarInstaller/modules/*
-arch-chroot /mnt /usr/bin/runuser -u $USERNAME -- /home/$USERNAME/HussarInstaller/scripts/4-user.sh
+cp -r ../HussarInstaller /mnt/home/"$USERNAME"/HussarInstaller
+chmod a+rwx /mnt/home/"$USERNAME"/HussarInstaller/scripts/*
+chmod a+rwx /mnt/home/"$USERNAME"/HussarInstaller/modules/*
+arch-chroot /mnt /usr/bin/runuser -u "$USERNAME" -- "bash /home/$USERNAME/HussarInstaller/scripts/4-user.sh"
 
-arch-chroot /mnt $HOME/HussarInstaller/scripts/5-postconfig.sh
+arch-chroot /mnt "bash /home/$USERNAME/HussarInstaller/scripts/5-postconfig.sh"
 
 clear
 echo "Install Complete"
@@ -90,23 +90,34 @@ msg () {
 ================================================================='
 	cat install.conf	
 	echo 	
-	for mod in "${MODULES[@]}"; do
-		echo " ${mod^} options used: 
+	for MOD in "${MODULES[@]}"; do
+		echo " ${MOD^} options used: 
 ==================================================================="
-		cat "./modules/$mod.conf"
+		cat "./modules/$MOD.conf"
 		echo
 	done
+	
+	for MOD in "${MODULES[@]}"; do
+		source ./modules/"$MOD"
+		if type 'finalmsg' 2>dev/null | grep -q 'function'; then
+			echo "Message from $MOD: 
+==================================================================="
+			finalmsg			
+		fi
+		unset -f finalmsg	
+	done
+	
 }
 
-rm -r /mnt/root/HussarInstaller
-[ "$SCRIPT_COPY" == "true" ] || rm -r /mnt/home/$USERNAME/HussarInstaller && msg > /mnt/home/$USERNAME/HussarInstaller
 
 sed -i 32c"%wheel ALL=(ALL:ALL) ALL" /mnt/etc/sudoers
 rm -r /mnt/root/HussarInstaller
-rm -r /mnt/$USERNAME/HussarInstaller
+[ "$SCRIPT_COPY" = "true" ] || rm -r /mnt/home/"$USERNAME"/HussarInstaller
+
+msg > /mnt/home/"$USERNAME"/README
 
 umount /mnt/boot/efi
 umount /mnt/home
-swapoff ${DISK}2
+swapoff "${DISK}2"
 umount /mnt 
 

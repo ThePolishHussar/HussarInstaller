@@ -35,3 +35,9 @@ postconfig () {
 	[ "$GUI_ENTRY" == "true" ] && curl -s https://raw.githubusercontent.com/syncthing/syncthing/main/etc/linux-desktop/syncthing-ui.desktop > /usr/local/share/applications/
 
 }
+
+finalmsg () {
+	echo 'You still need to add folders and devices for syncting.
+If this script worked properly, http://localhost:8384 should already link to the configuration GUI.
+See Synthing's documentation at https://docs.syncthing.net/'
+}

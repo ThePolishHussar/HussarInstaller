@@ -29,6 +29,9 @@ sed -i 's_#[multilib]
 #Include = /etc/pacman.d/mirrorlist_[multilib]
 Include = /etc/pacman.d/mirrorlist_' /etc/pacman.conf
 
+rm /bin/sh
+ln -s /bin/dash /bin/sh
+
 for MODULE in "${MODULES[@]}"; do
 	source ./modules/"$MODULE"
 	baseconfig

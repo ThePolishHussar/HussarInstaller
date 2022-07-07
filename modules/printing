@@ -4,40 +4,31 @@
 # Matrix - @thewingedhussar:matrix.org
 
 scriptmod () {    
-	 #if [ -f ./modules/printing.conf ]; then
-		 #cat ./modules/printing.conf
-		 #while true; do
-			 #read -p "Use these settings? [Y/n] " yn
-			 #case $yn in
-				 #[Nn]* ) break;;
-				 #* ) exit;;
-			 #esac
-		 #done
-	 #fi	
-
-	select PRINTER_CONNECTION in 'USB' 'DNS-SD/mDNS' 'Samba' 'Parallel Port'; do break; done
-	echo "PRINTER_CONNECTION =$PRINTER_CONNECTION " >> ./modules/printing.conf
-	#echo "PRINTER_MODEL=$PRINER_MODEL" >> ./modules/printing.conf
+	{
+	echo
+	} > ./modules/printing.conf
 }
 
 
 baseconfig () {
-	usermod -a -G 'printing/cups config group' $USERNAME
+	usermod -a -G lp $USERNAME
 }
 
-user () {
-	packages=(
-		cups 
-		cups-pdf	
-
-		ppd pkgs
-	)
-	AURpackages=(
-
-	)
-}
+packages=(
+	cups 
+	gutenprint
+	foomatic-db-gutenprint-ppds
+)
 
 postconfig () {
-	sed 51c'Out /home/${USER}/Documents/cups-pdf.'
 	systemctl enable cups.service
+}
+
+finalmsg () {
+	echo 'You still need to add the printer manually. 
+Run "sudo pacman -S system-config-printer" for an GUI to easyly setup
+If drivers are still missing consult https://wiki.archlinux.org/title/CUPS/Printer-specific_problems.
+Also note this from the arch wiki [https://wiki.archlinux.org/title/CUPS]
+"Note: When the Gutenprint packages get updated, the printers using Gutenprint drivers will stop working until you run cups-genppdupdate as root and restart CUPS. cups-genppdupdate will update the PPD files of the configured printers, see cups-genppdupdate(8) for more details."
+'
 }

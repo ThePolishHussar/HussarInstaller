@@ -1,0 +1,114 @@
+#!/bin/bash
+
+# https://github.com/ThePolishHussar/HussarInstaller
+# Matrix - @thewingedhussar:matrix.org
+
+scriptmod () {
+	#PS3='Selection > '
+	#select DISPLAY_SERVER in xorg wayland; do break; done	
+	#declare -n DISPLAY_SERVER=$DISPLAY_SERVER
+	
+	desktop_enviorments=(	
+		manual
+		budgie-desktop
+		cinnamon
+		cutefish
+		deepin
+		enlightenment
+		gnome
+		plasma
+		lxde
+		lxqt
+		mate
+		ukui
+		xfce4
+	)
+
+	select DESKTOP_ENVIORMENT in "${desktop_enviorments[@]}"; do break; done	
+	if [ "$DESKTOP_ENVIORMENT" == "manual" ]; then
+		unset DESKTOP_ENVIORMENT
+		echo 'Manually List Packages'
+		echo "enter 'done' at anytime to end you list"
+		while true; do
+			read -p "new package: " pkg
+			case $pkg in
+				done) break;;
+				*)	DESKTOP_ENVIORMENT=(
+					[ -z "$DEKTOP_ENVIORMENT" ] || "${DESKTOP_ENVIORMENT[@]}"
+					"$pkg" 
+					)
+				;;
+			esac
+		done
+	else
+		
+	fi
+	AURlogins=(
+	cdn
+	console-tdm
+	nodm
+	ly
+	tbsm
+	emptty-git
+	loginx
+	entrance-git
+	)
+	logins=(
+	gdm
+	lightdm
+	lxdm
+	lxdm-gtk3
+	sddm
+	xorg-xdm
+	"${AURlogins[@]}"
+	)
+	select DISPLAY_MANAGER in "${logins[@]}"; do break; done
+	for aur in "${AURlogins[@]}"; do
+		[ "$aur" == "$DISPLAY_MANAGER" ] && DISPLAY_MANAGER='' && AUR_DISPLAY_MANAGER="$aur"
+	done
+	 #[ -f ./modules/desktop.conf ] && rm ./modules/desktop.conf
+	 #echo 'DISPLAY_SERVER=(' >> ./modules/desktop.conf
+	 #for PKG in "${DISPLAY_SERVER[@]}"; do	
+		 #echo "$PKG" >> ./modules/desktop.conf
+	 #done
+	 #echo ')' >> ./modules/desktop.conf
+
+	{
+	echo 'DESKTOP_ENVIORMENT=(' 
+	for PKG in "${DESKTOP_ENVIORMENT[@]}"; do	
+		echo "$PKG"
+	done
+	echo ')'
+
+	if [ ! -z "$DISPLAY_MANAGER" ]; then
+		echo 'DISPLAY_MANAGER=('
+		for PKG in "${DISPLAY_MANAGER[@]}"; do	
+			echo "$PKG"
+		done
+	elif [ ! -z "$AUR_DISPLAY_MANAGER" ]; then
+		echo 'AUR_DISPLAY_MANAGER=('
+		for PKG in "${AUR_DISPLAY_MANAGER[@]}"; do	
+			echo "$PKG" 
+		done
+	fi
+	echo ')' 
+	} > ./modules/desktop.conf
+}
+
+
+source ./modules/desktop.conf
+packages=(
+	#"${DISPLAY_SERVER[@]}"
+	xorg
+	"${DESKTOP_ENVIORMENT[@]}"
+	"${DISPLAY_MANAGER[@]}"
+)	
+AURpackages=(
+	"${AUR_DISPLAY_MANAGER[@]}"
+)
+
+postconfig () {
+	[ ! -z ${DISPLAY_MANAGER} ] && systemctl enable ${DISPLAY_MANAGER}.serivce
+	[ ! -z ${AUR_DISPLAY_MANAGER} ] && systemctl enable ${AUR_DISPLAY_MANAGER}.service
+}
+

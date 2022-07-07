@@ -22,7 +22,7 @@ scriptmod () {
 			case $PKG in 
 				done) break;;
 				*) 	BTEXTRA=(
-						${BTEXTRA[@]}
+						[ ! -z "$BTEXTRA" ] && "${BTEXTRA[@]}"
 						"$PKG"	
 					)
 				;;
@@ -30,22 +30,22 @@ scriptmod () {
 		done
 	fi
 	
-	[ -f ./modules/bluetooth.conf ] && rm ./modules/bluetooth.conf
-	echo 'BTEXTRA=(' >> ./modules/bluetooth.conf
+	{
+	echo 'BTEXTRA=('
 	for PKG in "${BTEXTRA[@]}"; do
-		echo $PKG >> ./modules/bluetooth.conf
+		echo $PKG 
 	done
-	echo ')' >> ./modules/bluetooth.conf
+	echo ')'
+	} > ./modules/bluetooth.conf
 }
 
-user () {
-	[ -f ./modules/bluetooth.conf ] && source ./modules/bluetooth.conf
-	packages=(
-		bluez
-		bluez-utils
-		"${BTEXTRA[@]}"
-	)
-}
+source ./modules/bluetooth.conf
+packages=(
+	bluez
+	bluez-utils
+	"${BTEXTRA[@]}"
+)
+
 
 postconfig () {
 	systemctl enable bluetooth.service

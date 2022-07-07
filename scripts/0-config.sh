@@ -8,17 +8,21 @@ config () {
  	PS3='Select Disk Number: '
  	lsblk -n --output TYPE,KNAME,SIZE | awk '$1=="disk" {print "/dev/"$2" | "$3}'
  	echo 'Choose Disk:'
- 	select DISK in $(lsblk -n --output TYPE,KNAME | awk '$1=="disk"{print "/dev/"$2}'); do
-	 	DISK=$(echo $DISK | awk '{print $1}')
-     	break
- 	done
+	DISK=''
+	while [ -z "$DISK" ]; do
+
+	 	select DISK in $(lsblk -n --output TYPE,KNAME | awk '$1=="disk"{print "/dev/"$2}'); do
+		 	DISK=$(echo "$DISK" | awk '{print $1}')
+     		break
+ 		done
+	done
 
  	echo "How much swap space do you want?"
- 	MEM="$(grep MemTotal /proc/meminfo | awk '{print $2}')"
+ 	MEM=$(grep MemTotal /proc/meminfo | awk '{print $2}')
  	MEM=$((${MEM::-6}*2))
  	echo Recomended "$MEM"G
  	read -p "Enter amount in GBs : " SWAP_SIZE
- 	SWAP_SIZE="$(echo $SWAP_SIZE | tr -d [:alpha:][:punct:])"
+ 	SWAP_SIZE="${SWAP_SIZE//[!0-9]/}"
  	[ -z "$SWAP_SIZE" ] && SWAP_SIZE="$MEM"
  	SWAP_SIZE="${SWAP_SIZE}G"
  	echo "Do you want to leave a pre-existing home partion intact?"
@@ -31,11 +35,11 @@ config () {
 	 	esac
  	done		
 
- 	if [ "$RESPECT_HOME" == "false" ]; then
+ 	if [ "$RESPECT_HOME" = "false" ]; then
 	 	read -p "How large do you want your root partition to be?
  	Recomended: 100G " ROOT_SIZE
-	 	ROOT_SIZE="$( echo $ROOT_SIZE | tr -d [:alpha:][:punct:])"
-	 	[ -z ROOT_SIZE ] && ROOT_SIZE=100
+	 	ROOT_SIZE="${ROOT_SIZE//[!0-9]/}"
+	 	[ -z "$ROOT_SIZE" ] && ROOT_SIZE=100
 	 	ROOT_SIZE="${ROOT_SIZE}G"
  	fi
 
@@ -43,7 +47,6 @@ config () {
  	[ -z "$HOSTNAME" ] && HOSTNAME="archbox"
 
  	read -p "Choose a username: " USERNAME
- 	USERNAME="$(echo $USERNAME | tr -d [:upper:][:digit:])"
  	[ -z "$USERNAME" ] && USERNAME="user"
 
  	read -p "Choose a password: " USERPASS
@@ -78,7 +81,7 @@ config () {
  	MIRROR=$(curl -s https://ipapi.co/country)
 
  	read -p "How many parallel pacman downloads do yau want to allow? (Recomended: 5) " PARALLEL_DL
- 	declare PARALLEL_DL="$(echo $PARALLEL_DL | tr -d [:alpha:][:punct:])"
+ 	PARALLEL_DL="${PARALLEL_DL//[!0-9]/}"
  	[ -z "$PARALLEL_DL" ] && PARALLEL_DL=5
 
  	while true; do
@@ -90,6 +93,14 @@ config () {
  	done
 
  	while true; do
+	 	read -p "Enable colored pacman output? [Y/n] " YN
+	 	case $yn in
+		 	[Nn]* ) PAC_COLOR="false"; break;;
+		 	* ) PAC_COLOR="true"; break;;
+	 	esac
+ 	done
+
+ 	while true; do
 	 	read -p "Enable ILoveCandy easer egg? [Y/n] " YN
 	 	case $yn in
 		 	[Nn]* ) CANDY="false"; break;;
@@ -97,15 +108,22 @@ config () {
 	 	esac
  	done
 
- 	alias ls='ls'
- 	MODULES=($(ls ./modules | grep -v '.conf'))
+ 	while true; do
+	 	read -p "Leave a coty of script on installed system? [y/N] " YN
+	 	case $yn in
+		 	[YY]* ) SCRIPT_COPY="true"; break;;
+		 	* ) SCRIPT_COPY="false"; break;;
+	 	esac
+ 	done
+
+	MODULES=($(ls ./modules | grep -v '.conf'))
 
  	for MOD in "${MODULES[@]}"; do
 	 	while true; do
 		 	read -p "Run $MOD module? [Y/n] " YN
 		 	case $YN in
-			 	[Nn]* ) declare $MOD="false"; break;;
-			 	* ) declare $MOD="true"; break;;
+			 	[Nn]* ) declare "$MOD"="false"; break;;
+			 	* ) declare "$MOD"="true"; break;;
 		 	esac
 	 	done
  	done
@@ -127,17 +145,20 @@ config () {
  	MIRROR
  	LANGUAGE
  	KEYMAP
+	PAC_COLOR
+	SCRIPT_COPY
  	)
- 	for SET in "${SETTINGS[@]}"; do
-	 	echo "$SET=${!SET}" >> ./install.conf
- 	done
- 	
- 	echo 'MODULES=(' >> ./install.conf
- 	for MOD in "${MODULES[@]}"; do
-	 	[ "${!MOD}" == true ] && echo $MOD >> ./install.conf
- 	done
- 	echo ')' >> ./install.conf
-
+	{
+ 	 	for SET in "${SETTINGS[@]}"; do
+	 	 	echo "$SET=${!SET}"
+ 	 	done
+ 	 	
+ 	 	echo 'MODULES=('
+ 	 	for MOD in "${MODULES[@]}"; do
+	 	 	[ "${!MOD}" = true ] && echo "$MOD"
+ 	 	done
+ 	 	echo ')'
+	} >> ./install.conf
 } 	
 
 if [ -f ./install.conf ]; then
@@ -171,7 +192,7 @@ fi
 
 module_config () {
  	for MOD in "${MODULES[@]}"; do
-	 	source ./modules/$MOD
+	 	source ./modules/"$MOD"
 	 	scriptmod
 		unset -f scriptmod
  	done
@@ -180,10 +201,10 @@ module_config () {
 source ./install.conf
 
 for MOD in "${MODULES[@]}"; do
-	[ -f modules/$MOD.conf ] || MODCONFIGS='incomplete' && break
+	[ -f modules/"$MOD".conf ] || MODCONFIGS='incomplete' && break
 done
 
-[ "$MODCONFIGS" == 'incomplete' ] && module_config
+[ "$MODCONFIGS" = 'incomplete' ] && module_config
 
 while true; do
 
