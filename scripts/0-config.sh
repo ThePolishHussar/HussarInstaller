@@ -134,6 +134,7 @@ config () {
  	DISK
  	SWAP_SIZE
  	RESPECT_HOME
+	ROOT_SIZE
  	HOSTNAME
  	USERNAME
  	USERPASS
@@ -150,7 +151,7 @@ config () {
  	)
 	{
  	 	for SET in "${SETTINGS[@]}"; do
-	 	 	echo "$SET=${!SET}"
+	 	 	[ -z "${!SET}" ] || echo "$SET=${!SET}"
  	 	done
  	 	
  	 	echo 'MODULES=('
