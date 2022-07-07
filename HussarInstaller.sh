@@ -8,7 +8,7 @@ bash ./scripts/0-config.sh
 
 source ./install.conf
 
-bash ./scripts/1-paritions.sh
+bash ./scripts/1-partitions.sh
 
 bash ./scripts/2-install.sh
 
