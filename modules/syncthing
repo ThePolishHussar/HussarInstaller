@@ -37,7 +37,6 @@ postconfig () {
 }
 
 finalmsg () {
-	echo 'You still need to add folders and devices for syncting.
+	echo "You still need to add folders and devices for syncting.
 If this script worked properly, http://localhost:8384 should already link to the configuration GUI.
-See Synthing's documentation at https://docs.syncthing.net/'
-}
+See Synthing's documentation at https://docs.syncthing.net/"}
