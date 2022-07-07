@@ -5,7 +5,7 @@
 
 scriptmod () {    
 	{
-	echo
+	echo 'No Applicable Settings'
 	} > ./modules/printing.conf
 }
 

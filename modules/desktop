@@ -4,7 +4,7 @@
 # Matrix - @thewingedhussar:matrix.org
 
 scriptmod () {
-	#PS3='Selection > '
+	PS3='Selection > '
 	#select DISPLAY_SERVER in xorg wayland; do break; done	
 	#declare -n DISPLAY_SERVER=$DISPLAY_SERVER
 	
@@ -30,18 +30,16 @@ scriptmod () {
 		echo 'Manually List Packages'
 		echo "enter 'done' at anytime to end you list"
 		while true; do
-			read -p "new package: " pkg
-			case $pkg in
+			read -p "new package: " PKG
+			case $PKG in
 				done) break;;
 				*)	DESKTOP_ENVIORMENT=(
-					[ -z "$DEKTOP_ENVIORMENT" ] || "${DESKTOP_ENVIORMENT[@]}"
-					"$pkg" 
+					$( [ -z "$DEKTOP_ENVIORMENT" ] || "${DESKTOP_ENVIORMENT[@]}" )
+					"$PKG" 
 					)
 				;;
 			esac
 		done
-	else
-		
 	fi
 	AURlogins=(
 	cdn
@@ -95,8 +93,8 @@ scriptmod () {
 	} > ./modules/desktop.conf
 }
 
-
-source ./modules/desktop.conf
+scriptmod
+[ -f ./modules/desktop.conf ] && source ./modules/desktop.conf 
 packages=(
 	#"${DISPLAY_SERVER[@]}"
 	xorg

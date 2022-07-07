@@ -22,7 +22,7 @@ scriptmod () {
 			case $PKG in 
 				done) break;;
 				*) 	BTEXTRA=(
-						[ ! -z "$BTEXTRA" ] && "${BTEXTRA[@]}"
+						$( [ ! -z "$BTEXTRA" ] && echo "${BTEXTRA[@]}")
 						"$PKG"	
 					)
 				;;
@@ -39,7 +39,7 @@ scriptmod () {
 	} > ./modules/bluetooth.conf
 }
 
-source ./modules/bluetooth.conf
+[ -f ./modules/bluetooth.conf ] && source ./modules/bluetooth.conf
 packages=(
 	bluez
 	bluez-utils
