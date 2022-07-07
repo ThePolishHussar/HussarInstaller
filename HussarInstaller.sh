@@ -14,7 +14,7 @@ bash ./scripts/2-install.sh
 
 cp -r ../HussarInstaller /mnt/root/HussarInstaller
 
-arch-chroot /mnt "bash mnt/root/HussarInstaller/scripts/3-baseconf.sh"
+arch-chroot /mnt "bash /root/HussarInstaller/scripts/3-baseconf.sh"
 
 sed -i 32c"%wheel ALL=(ALL:ALL) NOPASSWD: ALL" /mnt/etc/sudoers
 cp -r ../HussarInstaller /mnt/home/"$USERNAME"/HussarInstaller
@@ -22,7 +22,7 @@ chmod a+rwx /mnt/home/"$USERNAME"/HussarInstaller/scripts/*
 chmod a+rwx /mnt/home/"$USERNAME"/HussarInstaller/modules/*
 arch-chroot /mnt /usr/bin/runuser -u "$USERNAME" -- "bash /home/$USERNAME/HussarInstaller/scripts/4-user.sh"
 
-arch-chroot /mnt "bash /home/$USERNAME/HussarInstaller/scripts/5-postconfig.sh"
+arch-chroot /mnt "bash /root/scripts/5-postconfig.sh"
 
 clear
 echo "Install Complete"
