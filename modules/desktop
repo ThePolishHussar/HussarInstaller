@@ -93,7 +93,6 @@ scriptmod () {
 	} > ./modules/desktop.conf
 }
 
-scriptmod
 [ -f ./modules/desktop.conf ] && source ./modules/desktop.conf 
 packages=(
 	#"${DISPLAY_SERVER[@]}"
