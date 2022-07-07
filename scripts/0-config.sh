@@ -109,7 +109,7 @@ config () {
  	done
 
  	while true; do
-	 	read -p "Leave a coty of script on installed system? [y/N] " YN
+	 	read -p "Leave a copy of script on installed system? [y/N] " YN
 	 	case $yn in
 		 	[YY]* ) SCRIPT_COPY="true"; break;;
 		 	* ) SCRIPT_COPY="false"; break;;
