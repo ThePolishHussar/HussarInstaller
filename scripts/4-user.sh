@@ -1,13 +1,15 @@
 #!/bin/bash
-source ./install.conf
+source $HOME/HussarInstaller/install.conf
 
-sudo pacman -S --noconfirm [base packages]
+#sudo pacman -S --noconfirm [base packages]
 
-sudo pacman -S --noconfirm --needed git
+sudo pacman -S --noconfirm --needed git 
+cd ~
 git clone https://aur.archlinux.org/yay.git
 cd yay
 makepkg -si
 
+exit
 if [ "$CHAOTIC_AUR" = "true" ]; then
 	pacman-key --recv-key FBA220DFC880C036 --keyserver keyserver.ubuntu.com
 	pacman-key --lsign-key FBA220DFC880C036
@@ -17,10 +19,10 @@ if [ "$CHAOTIC_AUR" = "true" ]; then
 fi
 
 for MODULE in "${MODULES[@]}"; do
-	source ./modules/"$MODULE"
+	source "$HOME/HussarInstaller/modules/$MODULE"
 	sudo pacman -S --noconfirm --needed "${packages[@]}"
 	yay -S --noconfirm --needed "${AURpackages[@]}"
-	user	
+	type 'user' 2>/dev/null | grep -q 'function' && user	
 	unset -f user
 	unset -v packages
 	unset -v AURpackages	

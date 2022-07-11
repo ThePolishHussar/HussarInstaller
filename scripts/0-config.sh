@@ -151,7 +151,7 @@ config () {
  	)
 	{
  	 	for SET in "${SETTINGS[@]}"; do
-	 	 	[ -z "${!SET}" ] || echo "$SET=${!SET}"
+	 	 	echo "$SET=${!SET}"
  	 	done
  	 	
  	 	echo 'MODULES=('
@@ -175,10 +175,9 @@ if [ -f ./install.conf ]; then
 
 else
 	config	
-
-	clear
-	cat ./install.conf
 	while true; do
+		clear
+		cat ./install.conf
 		read -p "Use these settings? [Y/n] " YN
 		case $YN in
 			[Nn]* ) config;;
@@ -194,7 +193,7 @@ fi
 module_config () {
  	for MOD in "${MODULES[@]}"; do
 	 	source ./modules/"$MOD"
-	 	scriptmod
+		type 'scriptmod' 2>/dev/null | grep -q 'function' && scriptmod			
 		unset -f scriptmod
  	done
 }

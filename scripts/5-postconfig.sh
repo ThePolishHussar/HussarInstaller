@@ -1,5 +1,5 @@
 #!/bin/bash
-source ./install.conf
+source $HOME/HussarInstaller/install.conf
 
 # Pacman Configuration
 [ "$PAC_COLOR" = "true" ] && sed -i 's/#Color/Color' /etc/pacman.conf
@@ -20,8 +20,8 @@ systemctl enable NetworkManager.service
 [[ "$DISK" =~ 'nvme' ]] && systemctl enable ftrim.timer
 
 for MODULE in "${MODULES[@]}"; do
-	source ./modules/"$MODULE"
-	postconfig
+	source "$HOME/HussarInstaller/modules/$MODULE"
+	type 'postconfig' 2>/dev/null | grep -q 'function' && postconfig
 	unset -f postconfig
 done
 

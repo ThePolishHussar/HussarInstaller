@@ -2,29 +2,26 @@
 
 ### Branding
 
-cmod a+rwx ./scripts/*
-
-bash ./scripts/0-config.sh
+#bash ./scripts/0-config.sh
 
 source ./install.conf
 
-bash ./scripts/1-partitions.sh
+#bash ./scripts/1-partitions.sh
 
-bash ./scripts/2-install.sh
+#bash ./scripts/2-install.sh
 
-cp -r ../HussarInstaller /mnt/root/HussarInstaller
+cp -r ../HussarInstaller/ /mnt/root/HussarInstaller/
 
-arch-chroot /mnt "bash /root/HussarInstaller/scripts/3-baseconf.sh"
+#arch-chroot /mnt "$HOME/HussarInstaller/scripts/3-baseconfig.sh"
 
-sed -i 32c"%wheel ALL=(ALL:ALL) NOPASSWD: ALL" /mnt/etc/sudoers
-cp -r ../HussarInstaller /mnt/home/"$USERNAME"/HussarInstaller
-chmod a+rwx /mnt/home/"$USERNAME"/HussarInstaller/scripts/*
-chmod a+rwx /mnt/home/"$USERNAME"/HussarInstaller/modules/*
-arch-chroot /mnt /usr/bin/runuser -u "$USERNAME" -- "bash /home/$USERNAME/HussarInstaller/scripts/4-user.sh"
+sed -i 85c"%wheel ALL=(ALL:ALL) NOPASSWD: ALL" /mnt/etc/sudoers
 
-arch-chroot /mnt "bash /root/scripts/5-postconfig.sh"
+cp -R ../HussarInstaller /mnt/home/"$USERNAME"/HussarInstaller
+chmod -R a+rwx /mnt/home/"$USERNAME"/HussarInstaller/
+arch-chroot /mnt /usr/bin/runuser -u "$USERNAME" -- "/home/$USERNAME/HussarInstaller/scripts/4-user.sh"
 
-clear
+arch-chroot /mnt "$HOME/HussarInstaller/scripts/5-postconfig.sh"
+
 echo "Install Complete"
 
 msg () {
@@ -99,7 +96,7 @@ msg () {
 	
 	for MOD in "${MODULES[@]}"; do
 		source ./modules/"$MOD"
-		if type 'finalmsg' 2>dev/null | grep -q 'function'; then
+		if type 'finalmsg' 2>/dev/null | grep -q 'function'; then
 			echo "Message from $MOD: 
 ==================================================================="
 			finalmsg			
@@ -110,14 +107,14 @@ msg () {
 }
 
 
-sed -i 32c"%wheel ALL=(ALL:ALL) ALL" /mnt/etc/sudoers
-rm -r /mnt/root/HussarInstaller
-[ "$SCRIPT_COPY" = "true" ] || rm -r /mnt/home/"$USERNAME"/HussarInstaller
+sed -i 85c"%wheel ALL=(ALL:ALL) ALL" /mnt/etc/sudoers
+#rm -r /mnt/root/HussarInstaller
+#[ "$SCRIPT_COPY" = "true" ] || rm -r /mnt/home/"$USERNAME"/HussarInstaller
 
 msg > /mnt/home/"$USERNAME"/README
 
-umount /mnt/boot/efi
-umount /mnt/home
-swapoff "${DISK}2"
-umount /mnt 
+#umount /mnt/boot/efi
+#umount /mnt/home
+#swapoff "${DISK}2"
+#umount /mnt 
 
