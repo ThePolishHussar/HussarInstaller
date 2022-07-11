@@ -68,7 +68,7 @@ packages=(
 
 user () {
 
-	source ./modules/firefox
+	source $HOME/HussarInstaller/modules/firefox
 
 	firefox --headless & sleep 3 && killall firefox
 	PROFILE_DIR=$(cat ~/.mozilla/firefox/profiles.ini | grep 'Default=' | grep release | sed 's/Default=//')

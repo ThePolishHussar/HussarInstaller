@@ -93,7 +93,7 @@ scriptmod () {
 	} > ./modules/desktop.conf
 }
 
-[ -f ./modules/desktop.conf ] && source ./modules/desktop.conf 
+[ -f $HOME/HussarInstaller/modules/desktop.conf ] && source $HOME/HussarInstaller/modules/desktop.conf 
 packages=(
 	#"${DISPLAY_SERVER[@]}"
 	xorg

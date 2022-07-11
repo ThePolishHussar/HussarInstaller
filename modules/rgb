@@ -10,7 +10,7 @@ scriptmod () {
 	echo "AURpackages=($PKG)" >> ./modules/rgb.conf
 }
 
-source ./modules/rgb.conf
+source $HOME/HussarInstaller/modules/rgb.conf
 
 postconfig () {
 	echo 'i2c-dev' > /etc/modules-load.d/i2c.conf
